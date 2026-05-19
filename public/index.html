@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>マイアプリ</title>
+</head>
+<body>
+
+  <h1>マイアプリ（POSTテスト）</h1>
+  <button id="send-button">データを送信する</button>
+
+
+  <script>
+    // 1. 画面にある「send-button」というIDのボタンを、JavaScriptで見つけて持ってきます
+    const button = document.getElementById('send-button');
+
+    // 2. そのボタンが「クリック（click）されたとき」の動作を登録します
+    button.addEventListener('click', async () => {
+      
+      // 3. サーバー（app.js）の「/api/items」に向けて、データを送る準備をします
+      const response = await fetch('/api/items', {
+        method: 'POST', // データを新しく送る（作成する）ためのPOSTメソッド
+        headers: { 'Content-Type': 'application/json' }, // 「JSON形式で送るよ」という合図
+        
+        // 4. 送りたい中身（データ）をJSONの文字に変形して、通信の本体に載せます
+        body: JSON.stringify({ name: 'りんご', quantity: 3 }) 
+      });
+
+      // 5. サーバーから戻ってきたお返事（レスポンス）を受け取ります
+      const data = await response.json();
+      
+      // 6. ブラウザのコンソール（開発者ツール）に、戻ってきたデータを表示します
+      console.log('サーバーから戻ってきたデータ:', data);
+      
+      // 7. 画面にポップアップ（通知）を出して、成功したことを知らせます
+      alert('サーバーにデータを送りました！app.jsを動かしているターミナルを確認してください。');
+    });
+  </script>
+
+</body>
+</html>
