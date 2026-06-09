@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EATEN - 次世代AIグルメコンシェルジュ</title>
+    <style>
+        /* 1. 食欲をそそるカラー（ボルドーワイン、ディープゴールド、アイボリー）への刷新 */
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+            background-color: #fcfbfa; /* 温かみのある高級アイボリー */
+            color: #2c2523; /* 深みのあるダークブラウン */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ヘッダー */
+        header {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #8a1818; /* 食欲をそそるワインレッド */
+        }
+
+        nav a {
+            color: #555;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #8a1818;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* メインビジュアル（Wixのトップ画面を完全再現） */
+        .hero-section {
+            display: flex;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            margin-bottom: 40px;
+            min-height: 400px;
+        }
+
+        .hero-text {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            margin: 0 0 20px 0;
+            color: #1a1514;
+            line-height: 1.2;
+        }
+
+        /* 3. ご指定のキャッチコピー */
+        .hero-text p {
+            color: #665e5c;
+            font-size: 16px;
+            line-height: 1.8;
+            margin: 0 0 30px 0;
+        }
+
+        .hero-btn {
+            background-color: #8a1818;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: 0.2s;
+        }
+
+        .hero-btn:hover {
+            background-color: #b52626;
+        }
+
+        .hero-image {
+            flex: 1;
+            background: linear-gradient(135deg, #e3dac9 0%, #cbbeb5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 抽象的なグラフィックアートの表現 */
+        .hero-image::before {
+            content: "";
+            width: 260px;
+            height: 260px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        /* 4. 直感で探す機能（自然言語検索バー） */
+        .search-section {
+            background-color: #f4eee8;
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 16px;
+            margin-bottom: 40px;
+        }
+
+        .search-section h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #1a1514;
+        }
+
+        .search-bar-container {
+            max-width: 750px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            padding: 6px;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #ddd;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 12px 15px;
+            font-size: 15px;
+            outline: none;
+            background: transparent;
+        }
+
+        .search-btn {
+            background-color: #8a1818;
+            color: white;
+            border: none;
+            padding: 0 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* アプリの特徴エリア */
+        .app-headline {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin: 50px 0 20px;
+        }
+
+        .feature-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background: #ffffff;
+            border: 1px solid #8a1818;
+            color: #8a1818;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* AI・一本釣りエリアレイアウト */
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .ai-chat-box {
+            flex: 12;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+            border: 1px solid #eae5e0;
+        }
+
+        .chat-title {
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            color: #8a1818;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 5px;
+        }
+
+        .msg {
+            margin-bottom: 12px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .msg.bot {
+            color: #333;
+            background: #f7f5f2;
+            padding: 10px 14px;
+            border-radius: 4px 14px 14px 14px;
+            align-self: flex-start;
+            max-width: 85%;
+        }
+
+        .msg.user {
+            color: #8a1818;
+            background: #fff0f0;
+            padding: 10px 14px;
+            border-radius: 14px 14px 4px 14px;
+            align-self: flex-end;
+            max-width: 85%;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        /* 2. 項目をもっと豊富に（カテゴリ分類して言葉を増量） */
+        .opt-group-title {
+            font-size: 11px;
+            color: #888;
+            width: 100%;
+            margin: 5px 0 2px 0;
+            font-weight: bold;
+        }
+
+        .chat-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            background: #faf8f5;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .opt-btn {
+            background-color: #ffffff;
+            border: 1px solid #d3c9c1;
+            color: #4a3f3d;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .opt-btn:hover {
+            background-color: #8a1818;
+            color: white;
+            border-color: #8a1818;
+        }
+
+        .proposal-box {
+            flex: 11;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid #eae5e0;
+        }
+
+        .proposal-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 15px;
+            color: #777;
+        }
+
+        .restaurant-card {
+            background-color: #fffdfb;
+            border-radius: 8px;
+            border: 1px solid #eedfd3;
+            padding: 20px;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .res-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #1a1514;
+        }
+
+        .res-meta {
+            font-size: 13px;
+            color: #8a1818;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .trust-score-box {
+            background-color: #f0f9f4;
+            border-left: 4px solid #188a4f;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .trust-score-title {
+            font-size: 11px;
+            color: #188a4f;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .trust-score-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .res-desc {
+            font-size: 13.5px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .placeholder-text {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            padding: 40px 0;
+            line-height: 1.6;
+        }
+
+        /* 5. 最新レビュー（ブログ風カードセクションの再現） */
+        .reviews-section {
+            margin-top: 50px;
+            border-top: 1px solid #e3dec3;
+            padding-top: 40px;
+        }
+
+        .reviews-section h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+        }
+
+        .review-grid {
+            display: flex;
+            gap: 25px;
+        }
+
+        .review-card {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            border: 1px solid #eae5e0;
+            transition: 0.3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .card-img {
+            height: 180px;
+            background-color: #eae5e0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .user-info {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a1514;
+            line-height: 1.4;
+        }
+
+        .card-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* フッター */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #eae5e0;
+            padding: 30px 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">EATEN</div>
+        <nav>
+            <a href="#">ホーム</a>
+            <a href="#">ブログ</a>
+            <a href="#">ポートフォリオページ</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <div class="hero-section">
+            <div class="hero-text">
+                <h1>EATEN</h1>
+                <p>食べる喜びを見つけよう。AI自然言語検索が直感的に繋ぐ、あなたの感性と理想のレストラン。感情豊かなダイニング体験をここに。</p>
+                <button class="hero-btn" onclick="scrollToChat()">体験を始める</button>
+            </div>
+            <div class="hero-section hero-image"></div>
+        </div>
+
+        <div class="search-section">
+            <h2>直感で探す</h2>
+            <div class="search-bar-container">
+                <input type="text" class="search-input" id="freeInput" placeholder="「静かで記念日にぴったりな、隠れ家イタリアンを教えて」">
+                <button class="search-btn" onclick="handleFreeSearch()">検索</button>
+            </div>
+        </div>
+
+        <div class="app-headline" id="ai-anchor">探さないグルメ体験</div>
+        <div class="feature-badges">
+            <div class="badge">① 信頼スコア</div>
+            <div class="badge">② 一本釣り提案</div>
+            <div class="badge">③ 現在地連動</div>
+        </div>
+
+        <div class="main-layout">
+            
+            <div class="ai-chat-box">
+                <div class="chat-title">✨ EATEN AI コンシェルジュ</div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="msg bot">AI: お疲れ様です！名古屋駅周辺の現在地データを取得しました。今夜のご気分に合わせて、直感的なキーワードからお選びください。</div>
+                </div>
+                
+                <div class="chat-options" id="chatOptions">
+                    <div class="opt-group-title">【エモさ・感覚】</div>
+                    <button class="opt-btn" onclick="selectOption('emo', 'エモい隠れ家でゆっくり')">🌇 エモい隠れ家</button>
+                    <button class="opt-btn" onclick="selectOption('quiet', '静かな大人空間')">🕯️ 静かに過ごしたい</button>
+                    
+                    <div class="opt-group-title">【シーン・設備】</div>
+                    <button class="opt-btn" onclick="selectOption('private', '完全個室があるお店')">🚪 個室重視</button>
+                    <button class="opt-btn" onclick="selectOption('view', '夜景が見える席')">🌃 夜景が綺麗</button>
+                    
+                    <div class="opt-group-title">【食欲・ジャンル】</div>
+                    <button class="opt-btn" onclick="selectOption('meat', 'がっつり贅沢にお肉')">🥩 がっつり肉</button>
+                    <button class="opt-btn" onclick="selectOption('fish', '新鮮な魚定食・割烹')">🐟 丁寧な魚料理</button>
+                    <button class="opt-btn" onclick="selectOption('spice', 'スパイスを補給したい')">🌶️ 本格スパイス</button>
+                </div>
+            </div>
+
+            <div class="proposal-box">
+                <div class="proposal-title" id="proposalTitle">あなたへの今日の最適解</div>
+                
+                <div class="placeholder-text" id="placeholder">
+                    左側でキーワードを選ぶか、上の「直感で探す」に入力すると、<br>**現在地から最も近い最適なお店**がピンポイントで表示されます。
+                </div>
+
+                <div class="restaurant-card" id="card_emo">
+                    <div class="res-name">ビストロ・ヴァン 「黎明 -Reimei-」</div>
+                    <div class="res-meta">📍 現在地から230m (名駅4丁目) | 予算: ¥5,000〜¥7,000</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.7 <span style="font-size:11px; color:#666; font-weight:normal;">(直近のサクラ・報酬系レビューのノイズを完全排除)</span></div>
+                    </div>
+                    <div class="res-desc">「エモい隠れ家」を求めるあなたへ。照明を落としたアンティーク調の空間で、自然派ワインと創作フレンチを楽しめます。無駄にスクロールして迷うことなく、今夜の雰囲気に浸れる一軒です。</div>
+                </div>
+
+                <div class="restaurant-card" id="card_quiet">
+                    <div class="res-name">日本料理 「淡水」</div>
+                    <div class="res-meta">📍 現在地から450m (名駅南) | 予算: ¥8,000〜¥12,000</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.9 <span style="font-size:11px; color:#666; font-weight:normal;">(常連のグルメ知識層による本質的な評価を抽出)</span></div>
+                    </div>
+                    <div class="res-desc">都会の喧騒を忘れられる静かな大人空間です。職人が一品ずつ丁寧に仕上げる旬の会席料理を堪能できます。</div>
+                </div>
+
+                <div class="restaurant-card" id="card_private">
+                    <div class="res-name">個室鉄板庵 「織部」</div>
+                    <div class="res-meta">📍 現在地から180m (名駅3丁目) | 予算: ¥10,000〜¥15,000</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.6 <span style="font-size:11px; color:#666; font-weight:normal;">(ビジネス利用・接待ログから高評価を厳選)</span></div>
+                    </div>
+                    <div class="res-desc">全席が完全防音の個室になっており、専属シェフが目の前で厳選された食材を焼き上げます。プライベートを守り抜く最高の空間です。</div>
+                </div>
+
+                <div class="restaurant-card" id="card_view">
+                    <div class="res-name">ザ・スカイラウンジ 「Starlight」</div>
+                    <div class="res-meta">📍 現在地から300m (名駅タワー内) | 予算: ¥6,000〜¥9,000</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.5 <span style="font-size:11px; color:#666; font-weight:normal;">(席の配置と窓際確約度をAIがチェック済み)</span></div>
+                    </div>
+                    <div class="res-desc">地上150メートルから名古屋の夜景を一望できる、これ以上ないロマンチックな席をご用意しました。</div>
+                </div>
+
+                <div class="restaurant-card" id="card_meat">
+                    <div class="res-name">飛騨牛ステーキ庵 「極」</div>
+                    <div class="res-meta">📍 現在地から120m (名駅3丁目) | 予算: ¥7,000〜¥9,000</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.8 <span style="font-size:11px; color:#666; font-weight:normal;">(肉の目利きに対する信頼度の高い書き込みのみを判定)</span></div>
+                    </div>
+                    <div class="res-desc">最高ランクの飛騨牛を薪焼きで肉汁を閉じ込めた究極の肉料理。ガッツリかつ至高の贅沢を味わえます。</div>
+                </div>
+
+                <div class="restaurant-card" id="card_fish">
+                    <div class="res-name">地魚割烹 「あきら」</div>
+                    <div class="res-meta">📍 現在地から350m (柳橋周辺) | 予算: ¥4,000〜¥6,000</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.7 <span style="font-size:11px; color:#666; font-weight:normal;">(毎朝の仕入れ状況と連動したリアルタイムスコア)</span></div>
+                    </div>
+                    <div class="res-desc">柳橋中央市場から直送された極上の生マグロやのどぐろを、お値打ちに刺身や煮付けで提供する名店です。</div>
+                </div>
+
+                <div class="restaurant-card" id="card_spice">
+                    <div class="res-name">薬膳カリー・ボタニカル</div>
+                    <div class="res-meta">📍 現在地から500m (名駅5丁目) | 予算: ¥1,500〜¥2,500</div>
+                    <div class="trust-score-box">
+                        <div class="trust-score-title">✓ レビュー信用性AI判定</div>
+                        <div class="trust-score-value">★ 4.4 <span style="font-size:11px; color:#666; font-weight:normal;">(小麦粉不使用・スパイス純度の高さをAIが確認)</span></div>
+                    </div>
+                    <div class="res-desc">30種類のスパイスとハーブだけで作った、身体の芯から温まる本格スパイスカレー。</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h2>最新レビュー</h2>
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400')"></div>
+                    <div class="card-body">
+                        <div class="user-info">👤 endoshozo0511 ・ 34分前</div>
+                        <div class="card-title">食の体験を共有するEATENの完全ガイド</div>
+                        <div class="card-text">食は文化の一部であり、私たちの生活に深く根ざしています。EATENは、本物の食の体験を共有するプラットフォームとして…</div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400')"></div>
+                    <div class="card-body">
+                        <div class="user-info">👤 endoshozo0511 ・ 34分前</div>
+                        <div class="card-title">EATENで見つける！隠れた飲食店の宝庫</div>
+                        <div class="card-text">日本の飲食シーンは常に新しいトレンドや隠れた名店が登場しています。EATEN独自のAI認証システムを利用することで…</div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400')"></div>
+                    <div class="card-body">
+                        <div class="user-info">👤 endoshozo0511 ・ 34分前</div>
+                        <div class="card-title">レストラン探索の新たな方法：EATENの魅力</div>
+                        <div class="card-text">食事を楽しむことは、私たちの日常生活において欠かせない要素です。何百件もの候補をスクロールして疲れる従来の方法から…</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>お問い合わせ: info@eaten-review.jp | 名古屋市中村区 1-1-1 クリームチーズオフィス</p>
+        <p>© 2026 EATEN. 無断複写・転載を禁じます。</p>
+    </footer>
+
+    <script>
+        function scrollToChat() {
+            document.getElementById('ai-anchor').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 4. 直感で探す（自然言語入力）の動作実証
+        function handleFreeSearch() {
+            const input = document.getElementById('freeInput').value;
+            if(!input) return;
+            
+            // 入力文字に応じて、プロトタイプとして適したカードにマッピング
+            if(input.includes('イタリアン') || input.includes('隠れ家') || input.includes('記念日')) {
+                selectOption('emo', `直感検索: 「${input}」`);
+            } else if(input.includes('個室')) {
+                selectOption('private', `直感検索: 「${input}」`);
+            } else {
+                selectOption('quiet', `直感検索: 「${input}」`);
+            }
+            scrollToChat();
+        }
+
+        function selectOption(type, text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const placeholder = document.getElementById('placeholder');
+            
+            chatMessages.innerHTML += `<div class="msg user">${text}</div>`;
+            chatMessages.innerHTML += `<div class="msg bot" id="loading">AI: あなたの現在地から最も条件に合う『一本釣り店舗』を特定中...</div>`;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            document.getElementById('chatOptions').style.visibility = 'hidden';
+
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if(loading) loading.remove();
+
+                chatMessages.innerHTML += `<div class="msg bot">AI: お待たせしました！サクラレビューを排除し、現在地から近い最適な1軒を絞り込みました。右側をご覧ください。</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                placeholder.style.display = 'none';
+                
+                const cards = document.querySelectorAll('.restaurant-card');
+                cards.forEach(card => card.style.display = 'none');
+
+                const targetCard = document.getElementById('card_' + type);
+                if(targetCard) targetCard.style.display = 'block';
+                
+                document.getElementById('proposalTitle').innerHTML = '✨ AIが現在地から一本釣りした最適解 ✨';
+                document.getElementById('chatOptions').style.visibility = 'visible';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
