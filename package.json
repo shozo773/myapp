@@ -14,5 +14,17 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg": "^8.21.0"
-  }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shozo773/myapp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shozo773/myapp/issues"
+  },
+  "homepage": "https://github.com/shozo773/myapp#readme"
 }

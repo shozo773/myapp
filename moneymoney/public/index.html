@@ -6,10 +6,10 @@
     <style>
         body { font-family: sans-serif; margin: 30px; background: #f5f5f5; }
         .container { background: white; padding: 20px; border-radius: 8px; max-width: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        input, select, button { margin: 5px 0; padding: 8px; width: 100%; box-sizing: border-box; }
+        input, button { margin: 5px 0; padding: 8px; width: 100%; box-sizing: border-box; }
         button { background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        ul { padding-left: 20px; }
-        li { margin: 5px 0; padding: 5px; background: #eee; list-style: none; border-radius: 4px; }
+        ul { padding-left: 0; }
+        li { margin: 5px 0; padding: 10px; background: #eee; list-style: none; border-radius: 4px; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
@@ -19,10 +19,6 @@
         <form id="moneyForm">
             <input type="text" id="title" placeholder="内容（例：お小遣い、マック）" required>
             <input type="number" id="amount" placeholder="金額（円）" required>
-            <select id="type">
-                <option value="income">収入 (プラス)</option>
-                <option value="expense">支出 (マイナス)</option>
-            </select>
             <button type="submit">データを追加 (POST)</button>
         </form>
 
@@ -37,12 +33,12 @@
         // 1. データ一覧を取得して画面に表示する関数 (GET)
         async function loadData() {
             try {
-                const res = await fetch('/api/money'); // 💡 自分のエンドポイントURLに合わせてね
+                const res = await fetch('/api/expenses'); // 💡 遠藤さんのURLに変えました！
                 const data = await res.json();
                 dataList.innerHTML = '';
                 data.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = `${item.title} : ￥${item.amount} (${item.type === 'income' ? '収入' : '支出'})`;
+                    li.innerHTML = `<span>${item.title}</span> <strong>￥${item.amount}</strong>`;
                     dataList.appendChild(li);
                 });
             } catch (err) {
@@ -55,13 +51,12 @@
             e.preventDefault();
             const title = document.getElementById('title').value;
             const amount = document.getElementById('amount').value;
-            const type = document.getElementById('type').value;
 
             try {
-                await fetch('/api/money', { // 💡 自分のエンドポイントURLに合わせてね
+                await fetch('/api/expenses', { // 💡 遠藤さんのURLに変えました！
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, amount: Number(amount), type })
+                    body: JSON.stringify({ title, amount: Number(amount) })
                 });
                 form.reset();
                 loadData(); // 登録後に一覧を再読み込み

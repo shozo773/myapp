@@ -1,37 +1,46 @@
-require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use(express.static('public'));
 
+// PostgreSQLの接続設定（自分の環境に合わせて書き換えてください）
 const pool = new Pool({
-  host:     process.env.DB_HOST,
-  port:     process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user:     process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  connectionString: 'postgres://ユーザー名:パスワード@localhost:5432/データベース名'
 });
 
-app.get('/api/messages', async (req, res) => {
-  const result = await pool.query(
-    'SELECT * FROM messages ORDER BY created_at ASC'
-  );
-  res.json(result.rows);
+// テスト用フロントエンド（HTML）を表示する設定
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 1. タスク一覧取得 (GET)
+app.get('/api/tasks', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM tasks ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'サーバーエラーが発生しました' });
+  }
 });
 
-app.post('/api/messages', async (req, res) => {
-  const { username, text } = req.body;
-  const result = await pool.query(
-    'INSERT INTO messages (username, text) VALUES ($1, $2) RETURNING *',
-    [username, text]
-  );
-  res.json(result.rows[0]);
+// 2. タスク追加 (POST)
+app.post('/api/tasks', async (req, res) => {
+  const { title } = req.body;
+  if (!title) {
+    return res.status(400).json({ error: 'タイトルは必須です' });
+  }
+  try {
+    await pool.query('INSERT INTO tasks (title) VALUES ($1)', [title]);
+    res.json({ success: true, message: 'タスクを追加しました' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'サーバーエラーが発生しました' });
+  }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(
-    `サーバが起動しました： http://localhost:${process.env.PORT || 3000}`,
-  );
+// サーバー起動
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`サーバーが起動しました: http://localhost:${PORT}`);
 });
