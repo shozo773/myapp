@@ -1,46 +1,48 @@
-const express = require('express');
-const { Pool } = require('pg');
-const path = require('path');
+const express = require("express");
+const { Pool } = require("pg");
+const path = require("path");
 
 const app = express();
-app.use(express.json());
+const PORT = 3000;
 
-// PostgreSQLの接続設定（自分の環境に合わせて書き換えてください）
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+// PostgreSQLの接続設定（自分の環境に合わせて設定してください）
 const pool = new Pool({
-  connectionString: 'postgres://ユーザー名:パスワード@localhost:5432/データベース名'
+  user: "postgres",
+  host: "localhost",
+  database: "postgres", 
+  password: "password", 
+  port: 5432,
 });
 
-// テスト用フロントエンド（HTML）を表示する設定
-app.use(express.static(path.join(__dirname, 'public')));
-
-// 1. タスク一覧取得 (GET)
-app.get('/api/tasks', async (req, res) => {
+// チャットアプリ用の API エンドポイント
+app.get("/api/messages", async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM tasks ORDER BY created_at DESC');
+    const result = await pool.query("SELECT * FROM messages ORDER BY id ASC");
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'サーバーエラーが発生しました' });
+    console.error("GETエラー:", err.message);
+    res.status(500).json({ error: "サーバーエラーが発生しました" });
   }
 });
 
-// 2. タスク追加 (POST)
-app.post('/api/tasks', async (req, res) => {
-  const { title } = req.body;
-  if (!title) {
-    return res.status(400).json({ error: 'タイトルは必須です' });
+app.post("/api/messages", async (req, res) => {
+  const { username, text } = req.body;
+  if (!username || !text) {
+    return res.status(400).json({ error: "名前とメッセージは必須です" });
   }
   try {
-    await pool.query('INSERT INTO tasks (title) VALUES ($1)', [title]);
-    res.json({ success: true, message: 'タスクを追加しました' });
+    const queryText = "INSERT INTO messages (username, text) VALUES ($1, $2) RETURNING *";
+    const result = await pool.query(queryText, [username, text]);
+    res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'サーバーエラーが発生しました' });
+    console.error("POSTエラー:", err.message);
+    res.status(500).json({ error: "サーバーエラーが発生しました" });
   }
 });
 
-// サーバー起動
-const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`サーバーが起動しました: http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
