@@ -4,8 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // ★ この行を追加します！
-  server: {
-    // ...既存の設定
-  }
+  base: './',
 })
