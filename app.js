@@ -5,15 +5,18 @@ const path = require("path");
 const app = express();
 const PORT = 3000;
 
+// JSONデータを受け取るための設定
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
 
-// PostgreSQLの接続設定（自分の環境に合わせて設定してください）
+// ★15-2の課題設定：ビルドされたReact（frontend/dist）をExpressから配信
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
+
+// PostgreSQLへの接続設定（ご自身の環境に合わせて変更してください）
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "postgres", 
-  password: "password", 
+  database: "postgres",
+  password: "Yamiyami773", // パスワードを設定している場合は変更
   port: 5432,
 });
 
