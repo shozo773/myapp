@@ -3,11 +3,11 @@ const { Pool } = require('pg');
 
 // .env から設定を読み込む
 const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || 'Yamiyami773',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'chatdb',
 });
 
 async function connectDB() {
