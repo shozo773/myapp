@@ -1,0 +1,67 @@
+cat << 'EOF' > public/index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>チャットアプリ</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+    input { padding: 8px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+    button { padding: 8px 16px; cursor: pointer; }
+    li { padding: 10px; border-bottom: 1px solid #ccc; list-style: none; }
+    ul { padding: 0; }
+  </style>
+</head>
+<body>
+  <h1>💬 チャットアプリ</h1>
+  <form id="chatForm">
+    <input type="text" id="username" placeholder="名前" required>
+    <input type="text" id="text" placeholder="メッセージ" required>
+    <button type="submit">送信</button>
+  </form>
+
+  <h2>送信されたメッセージ一覧</h2>
+  <ul id="messageList"></ul>
+
+  <script>
+    const API_URL = 'api/messages';
+
+    async function loadMessages() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const list = document.getElementById('messageList');
+        list.innerHTML = '';
+        data.forEach(m => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${m.username}</strong>: ${m.text}`;
+          list.appendChild(li);
+        });
+      } catch (e) {
+        console.error('取得エラー', e);
+      }
+    }
+
+    document.getElementById('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const text = document.getElementById('text').value;
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, text })
+        });
+        document.getElementById('text').value = '';
+        loadMessages();
+      } catch (e) {
+        console.error('送信エラー', e);
+      }
+    });
+
+    loadMessages();
+  </script>
+</body>
+</html>
+EOF
