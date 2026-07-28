@@ -1,35 +1,58 @@
-require('dotenv').config();
 const express = require('express');
-const { Pool } = require('pg');
+// 💡 先ほど直した1つ上の階層の db_connect.js を読み込む
+const pool = require('../db_connect'); 
 
 const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-const pool = new Pool({
-  host:     process.env.DB_HOST,
-  port:     process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user:     process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+// 🚀 テーブルがなければ自動作成
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS money (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        amount INTEGER NOT NULL,
+        type VARCHAR(50) NOT NULL DEFAULT 'expense',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log("✅ 成功！moneyテーブルの準備が完了しました！");
+  } catch (err) {
+    console.error("❌ DB接続エラー:", err.message);
+  }
+}
+
+// 1. データ一覧取得 (GET)
+app.get('/api/money', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM money ORDER BY id DESC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('データ取得エラー:', err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.get('/api/messages', async (req, res) => {
-  const result = await pool.query(
-    'SELECT * FROM messages ORDER BY created_at ASC'
-  );
-  res.json(result.rows);
+// 2. データ新規作成 (POST)
+app.post('/api/money', async (req, res) => {
+  try {
+    const { title, amount, type } = req.body;
+    const result = await pool.query(
+      'INSERT INTO money (title, amount, type) VALUES ($1, $2, $3) RETURNING *',
+      [title, amount, type || 'expense']
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('データ追加エラー:', err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.post('/api/messages', async (req, res) => {
-  const { username, text } = req.body;
-  const result = await pool.query(
-    'INSERT INTO messages (username, text) VALUES ($1, $2) RETURNING *',
-    [username, text]
-  );
-  res.json(result.rows[0]);
-});
-
-app.listen(3000, () => {
-  console.log('サーバーが起動しました: http://localhost:3000');
+// DBの準備が終わったらサーバー起動
+initDB().then(() => {
+  app.listen(3000, () => {
+    console.log('サーバーが起動しました: http://localhost:3000');
+  });
 });

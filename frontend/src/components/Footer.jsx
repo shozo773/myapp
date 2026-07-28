@@ -1,11 +1,19 @@
 import React from 'react';
-import { Navigation } from './Navigation'; // { } を使って読み込む
 
-export const Footer = () => {
+function Footer() {
   return (
-    <footer>
-      <Navigation />
-      <small>&copy; 2025</small>
+    <footer style={{
+      marginTop: '40px',
+      padding: '20px',
+      textAlign: 'center',
+      borderTop: '1px solid #eee',
+      color: '#888',
+      fontSize: '14px'
+    }}>
+      <p>© 2026 お金管理アプリ</p>
     </footer>
   );
-};
+}
+
+// 💡 これが無い・間違っているのが原因でした！
+export default Footer;
