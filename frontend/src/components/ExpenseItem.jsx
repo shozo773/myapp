@@ -1,22 +1,47 @@
 import React from 'react';
 
-const ExpenseItem = (props) => {
+function ExpenseItem({ item, onDelete }) {
+  // item がない場合のフォールバック（エラー防止）
+  if (!item) return null;
+
+  // 金額が未設定の場合は 0 にする（toLocaleString のエラーを防止）
+  const amount = item.amount ?? 0;
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', padding: '12px 8px' }}>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '12px',
+      borderBottom: '1px solid #eee',
+      backgroundColor: '#f9f9f9',
+      marginBottom: '8px',
+      borderRadius: '4px'
+    }}>
       <div>
-        <span style={{ color: '#888', marginRight: '15px' }}>{props.date}</span>
-        <strong style={{ fontSize: '16px' }}>{props.title}</strong>
+        {item.date && <span style={{ color: '#888', marginRight: '15px' }}>{item.date}</span>}
+        <strong style={{ fontSize: '16px' }}>{item.title || '（名称なし）'}</strong>
       </div>
       <div>
-        <span style={{ fontSize: '16px', fontWeight: 'bold', marginRight: '15px', color: '#c00000' }}>
-          {props.amount.toLocaleString()} 円
+        <span style={{ fontSize: '16px', fontWeight: 'bold', marginRight: '15px' }}>
+          {item.type === 'income' ? '＋' : '－'}￥{amount.toLocaleString()}
         </span>
-        <button style={{ padding: '4px 8px', backgroundColor: '#f2dede', color: '#a94442', border: '1px solid #ebccd1', borderRadius: '4px', cursor: 'pointer' }}>
+        <button
+          onClick={() => onDelete && onDelete(item.id)}
+          style={{
+            padding: '4px 8px',
+            backgroundColor: '#f2dede',
+            color: '#a94442',
+            border: '1px solid #ebccd1',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
           削除
         </button>
       </div>
     </div>
   );
-};
+}
 
 export default ExpenseItem;

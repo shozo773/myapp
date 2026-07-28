@@ -1,11 +1,19 @@
 import React from 'react';
 
-const TotalBalance = (props) => {
+function TotalBalance({ items }) {
+  // 収入と支出の合計を計算
+  const total = items.reduce((acc, item) => {
+    return item.type === 'income' ? acc + item.amount : acc - item.amount;
+  }, 0);
+
   return (
-    <div style={{ backgroundColor: '#e2f0d9', border: '1px solid #a9d18e', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center' }}>
-      <h2 style={{ margin: 0, color: '#385723' }}>現在の合計支出: {props.total} 円</h2>
+    <div style={{ padding: '16px', backgroundColor: '#e9ecef', borderRadius: '8px', marginBottom: '16px', textAlign: 'center' }}>
+      <h3 style={{ margin: 0, color: '#495057' }}>現在の残高</h3>
+      <p style={{ fontSize: '24px', fontWeight: 'bold', margin: '8px 0 0', color: total >= 0 ? '#28a745' : '#dc3545' }}>
+        ￥{total.toLocaleString()}
+      </p>
     </div>
   );
-};
+}
 
 export default TotalBalance;

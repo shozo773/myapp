@@ -8,8 +8,8 @@
         .container { background: white; padding: 20px; border-radius: 8px; max-width: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         input, select, button { margin: 5px 0; padding: 8px; width: 100%; box-sizing: border-box; }
         button { background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        ul { padding-left: 20px; }
-        li { margin: 5px 0; padding: 5px; background: #eee; list-style: none; border-radius: 4px; }
+        ul { padding-left: 0; }
+        li { margin: 5px 0; padding: 10px; background: #eee; list-style: none; border-radius: 4px; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
@@ -37,12 +37,14 @@
         // 1. データ一覧を取得して画面に表示する関数 (GET)
         async function loadData() {
             try {
-                const res = await fetch('api/money'); // 💡 自分のエンドポイントURLに合わせてね
+                // 先頭に / を付けて絶対パス指定に変更
+                const res = await fetch('/api/money'); 
                 const data = await res.json();
                 dataList.innerHTML = '';
                 data.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = `${item.title} : ￥${item.amount} (${item.type === 'income' ? '収入' : '支出'})`;
+                    const label = item.type === 'income' ? '【収入】' : '【支出】';
+                    li.innerHTML = `<span>${label} ${item.title}</span> <strong>￥${item.amount}</strong>`;
                     dataList.appendChild(li);
                 });
             } catch (err) {
@@ -58,7 +60,8 @@
             const type = document.getElementById('type').value;
 
             try {
-                await fetch('api/money', { // 💡 自分のエンドポイントURLに合わせてね
+                // 先頭に / を付けて絶対パス指定に変更
+                await fetch('/api/money', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ title, amount: Number(amount), type })

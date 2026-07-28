@@ -6,29 +6,44 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-// PostgreSQL接続設定（.envから読み込み）
 const pool = new Pool({
-  host:     process.env.DB_HOST,
-  port:     process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user:     process.env.DB_USER,
+  host:     process.env.DB_HOST || 'localhost',
+  port:     process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'myapp',
+  user:     process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD,
 });
 
-// メッセージ一覧の取得 API
+// 起動時にメッセージ用テーブルを自動作成する処理
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        text TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log("✅ データベース(messagesテーブル)の準備が完了しました");
+  } catch (err) {
+    console.error("❌ DB接続/テーブル作成エラー:", err.message);
+  }
+}
+initDB();
+
+// 1. チャットメッセージ一覧の取得 (GET)
 app.get('/api/messages', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT * FROM messages ORDER BY created_at ASC'
-    );
+    const result = await pool.query('SELECT * FROM messages ORDER BY id ASC');
     res.json(result.rows);
   } catch (err) {
-    console.error('メッセージ取得エラー:', err);
-    res.status(500).json({ error: 'DBからの取得に失敗しました' });
+    console.error('データ取得エラー:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 
-// メッセージ新規作成 API
+// 2. チャットメッセージの追加 (POST)
 app.post('/api/messages', async (req, res) => {
   try {
     const { username, text } = req.body;
@@ -38,13 +53,12 @@ app.post('/api/messages', async (req, res) => {
     );
     res.json(result.rows[0]);
   } catch (err) {
-    console.error('メッセージ追加エラー:', err);
-    res.status(500).json({ error: 'DBへの保存に失敗しました' });
+    console.error('データ追加エラー:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 
-// サーバー起動（環境変数 PORT を優先使用、無ければ 3000）
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`サーバが起動しました： http://localhost:${PORT}`);
+  console.log(`サーバーが起動しました: http://localhost:3000`);
 });
