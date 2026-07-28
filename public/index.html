@@ -37,7 +37,7 @@
         // 1. データ一覧を取得して画面に表示する関数 (GET)
         async function loadData() {
             try {
-                const res = await fetch('/api/money'); // 💡 自分のエンドポイントURLに合わせてね
+                const res = await fetch('api/money'); // 💡 自分のエンドポイントURLに合わせてね
                 const data = await res.json();
                 dataList.innerHTML = '';
                 data.forEach(item => {
@@ -58,7 +58,7 @@
             const type = document.getElementById('type').value;
 
             try {
-                await fetch('/api/money', { // 💡 自分のエンドポイントURLに合わせてね
+                await fetch('api/money', { // 💡 自分のエンドポイントURLに合わせてね
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ title, amount: Number(amount), type })
