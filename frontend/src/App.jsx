@@ -5,9 +5,12 @@ function App() {
   const [username, setUsername] = useState("");
   const [text, setText] = useState("");
 
+  // サブディレクトリ /s24/ を含めた完全な API パス
+  const API_URL = "/s24/api/messages";
+
   // 1. 初回表示時に DB からメッセージを取得 (GET)
   useEffect(() => {
-    fetch(".api/messages") // 先頭に / をつけない相対パス
+    fetch(API_URL)
       .then((res) => res.json())
       .then((data) => setMessages(data))
       .catch((err) => console.error("データ取得エラー:", err));
@@ -17,7 +20,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(".api/messages", { // 先頭に / をつけない相対パス
+    fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +30,7 @@ function App() {
       .then((res) => res.json())
       .then((newMessage) => {
         setMessages((prev) => [...prev, newMessage]);
-        setText(""); // メッセージ欄のみクリア
+        setText("");
       })
       .catch((err) => console.error("送信エラー:", err));
   };
