@@ -7,7 +7,7 @@ function App() {
 
   // 1. 初回レンダリング時に DB からメッセージを取得 (GET)
   useEffect(() => {
-    fetch("/api/messages") // 💡 先頭に / を付けない
+    fetch("api/messages") // 💡 先頭に / を付けない
       .then((res) => res.json())
       .then((data) => setMessages(data))
       .catch((err) => console.error("データ取得エラー:", err));
@@ -17,7 +17,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("/api/messages", { // 💡 先頭に / を付けない
+    fetch("api/messages", { // 💡 先頭に / を付けない
       method: "POST",
       headers: {
         "Content-Type": "application/json",
